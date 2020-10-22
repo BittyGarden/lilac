@@ -1,4 +1,4 @@
-module github.com/xiaotian/lilac
+module github.com/bittygarden/lilac
 
 go 1.15
 
