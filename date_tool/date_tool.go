@@ -9,17 +9,17 @@ func NowInE8() time.Time {
     return time.Now().In(E8)
 }
 
-//format current time in EAST 8 time zone to yyyy-MM-dd HH:mm:ss
+//return current time in EAST 8 time zone with yyyy-MM-dd HH:mm:ss format
 func NowDateTime() string {
     return DateTime(time.Now().In(E8))
 }
 
-//format current time in EAST 8 time zone to yyyy-MM-dd
+//return current time in EAST 8 time zone with yyyy-MM-dd format
 func NowDate() string {
     return Date(time.Now().In(E8))
 }
 
-//format current time in EAST 8 time zone to HH:mm:ss
+//return current time in EAST 8 time zone with HH:mm:ss format
 func NowTime() string {
     return Time(time.Now().In(E8))
 }
@@ -39,12 +39,7 @@ func Time(time time.Time) string {
     return time.Format("15:04:05")
 }
 
-//format time to yyyy-MM-dd HH:mm:ss, return "date",formatTime
-func NowDateTimeWithLabel() (string, string) {
-    return "date", DateTime(time.Now().In(E8))
-}
-
-//parse time from yyyy-MM-dd HH:mm:ss format time string, eg: "2006-01-02 15:04:05"
+//parse yyyy-MM-dd HH:mm:ss format time string to time, eg: "2006-01-02 15:04:05"
 func ParseDateTime(timeStr string) time.Time {
     result, err := time.ParseInLocation("2006-01-02 15:04:05", timeStr, E8)
     if nil != err {
@@ -53,7 +48,7 @@ func ParseDateTime(timeStr string) time.Time {
     return result
 }
 
-//parse time from yyyy-MM-dd format time string, eg: "2006-01-02"
+//parse yyyy-MM-dd format format time string to time, eg: "2006-01-02"
 func ParseDate(str string) time.Time {
     result, err := time.ParseInLocation("2006-01-02", str, E8)
     if nil != err {
@@ -62,7 +57,7 @@ func ParseDate(str string) time.Time {
     return result
 }
 
-//parse time from HH:mm:ss format time string, eg: "15:04:05"
+//parse HH:mm:ss format time string to time, eg: "15:04:05"
 func ParseTime(str string) time.Time {
     result, err := time.ParseInLocation("15:04:05", str, E8)
 
