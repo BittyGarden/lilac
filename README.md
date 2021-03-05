@@ -4,6 +4,9 @@ lilac,go tools.
 
 latest version: `v1.1.7`
 
+require:`github.com/bittygarden/lilac v1.1.7`
+
+import: `github.com/bittygarden/lilac/date_tool`
 import: `github.com/bittygarden/lilac/io_tool`
 
 ## date_tool
