@@ -25,5 +25,5 @@ import: `github.com/bittygarden/lilac/io_tool`
 
 ## io_tool
 
-* `io_tool.FileNExists(filePath string) bool` return true if file exists.
+* `io_tool.FileExists(filePath string) bool` return true if file exists.
 * `io_tool.FileNotExists(filePath string) bool` return true if file not exists.
