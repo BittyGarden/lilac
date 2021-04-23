@@ -27,3 +27,7 @@ import: `github.com/bittygarden/lilac/io_tool`
 
 * `io_tool.FileExists(filePath string) bool` return true if file exists.
 * `io_tool.FileNotExists(filePath string) bool` return true if file not exists.
+
+## random_tool
+
+* `random_tool.RandomNumber(max int, count int) ([]int, error)` generate specified count random number that in range [0, max) .
