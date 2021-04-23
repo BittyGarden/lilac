@@ -50,7 +50,7 @@ func (fdc *FixedDurationCache) Add(v interface{}) {
     //after add data to cache we can assert that last data is not expire
     node = fdc.start
     for {
-        if fdc.exipreTimeLine().Before(node.createTime) {
+        if fdc.expireTimeLine().Before(node.createTime) {
             fdc.start = node
             prev := node.prev
             //cut link list from node
@@ -67,7 +67,7 @@ func (fdc *FixedDurationCache) Add(v interface{}) {
 //Exists if in cache return ture, else return false
 func (fdc *FixedDurationCache) ExistsByKey(key string) bool {
     for node := fdc.end; node != nil; node = node.prev {
-        if node.createTime.Before(fdc.exipreTimeLine()) {
+        if node.createTime.Before(fdc.expireTimeLine()) {
             //not search from expire cache data
             return false
         }
@@ -86,7 +86,7 @@ func (fdc *FixedDurationCache) Exists(v interface{}) bool {
 //GetByKey return cache data mapped by key
 func (fdc *FixedDurationCache) GetByKey(key string) interface{} {
     for node := fdc.end; node != nil; node = node.prev {
-        if node.createTime.Before(fdc.exipreTimeLine()) {
+        if node.createTime.Before(fdc.expireTimeLine()) {
             //not search from expire cache data
             return nil
         }
@@ -110,7 +110,7 @@ func (fdc *FixedDurationCache) Diff(keyList []string) []interface{} {
 
     result := make([]interface{}, 0)
     for node := fdc.end; node != nil; node = node.prev {
-        if node.createTime.Before(fdc.exipreTimeLine()) {
+        if node.createTime.Before(fdc.expireTimeLine()) {
             break
         }
         nodeKey := fdc.keyFunc(node.value)
@@ -125,7 +125,7 @@ func (fdc *FixedDurationCache) Diff(keyList []string) []interface{} {
 func (fdc *FixedDurationCache) GetAll() []interface{} {
     result := make([]interface{}, 0)
     for node := fdc.end; node != nil; node = node.prev {
-        if node.createTime.Before(fdc.exipreTimeLine()) {
+        if node.createTime.Before(fdc.expireTimeLine()) {
             break
         }
         result = append(result, node.value)
@@ -134,7 +134,7 @@ func (fdc *FixedDurationCache) GetAll() []interface{} {
 }
 
 //expireTimeLine return time line, before the line data has expire, after the line data not expire
-func (fdc *FixedDurationCache) exipreTimeLine() time.Time {
+func (fdc *FixedDurationCache) expireTimeLine() time.Time {
     return time.Now().Add(fdc.duration * -1)
 }
 
