@@ -5,8 +5,21 @@ import (
     "testing"
 )
 
-func TestSplitArray(t *testing.T) {
+func TestSplitNil(t *testing.T) {
+    data := make([]int, 0)
 
+    splitArray := SplitArray(1, data)
+    assert.Equal(t, 0, len(splitArray))
+}
+
+func TestSplitEmpty(t *testing.T) {
+    data := make([]int, 0)
+
+    splitArray := SplitArray(1, data)
+    assert.Equal(t, 0, len(splitArray))
+}
+
+func TestSplitArray(t *testing.T) {
     data := make([]int, 100)
 
     for i := 0; i < 100; i++ {
