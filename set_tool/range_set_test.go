@@ -93,9 +93,12 @@ func TestRangeSet(t *testing.T) {
     for {
         value := rand.Intn(10000)
         set.Add(NewRange(uint64(value), uint64(value)))
-
-        r := NewRange(0, 0)
+        var r *Range
         for _, v := range set.rangeSet {
+            if r == nil {
+                r = v
+                continue
+            }
             b := r.end < v.start
             if !b {
                 fmt.Println(set.String())

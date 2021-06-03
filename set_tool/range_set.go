@@ -151,7 +151,7 @@ func (rs *RangeSet) index(index uint64) int {
 }
 
 func haveSameIndex(a *Range, b *Range) bool {
-    return (a.start >= b.start-1 && a.start <= b.end+1) || (a.end >= b.start-1 && a.end <= b.end+1)
+    return (a.start+1 >= b.start && a.start <= b.end+1) || (a.end+1 >= b.start && a.end <= b.end+1)
 }
 
 func Min(a, b uint64) uint64 {
