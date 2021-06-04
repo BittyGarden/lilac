@@ -5,7 +5,7 @@ import (
     "strings"
 )
 
-//RangeSet
+//RangeSet is a range set, such as {[1,1],[5,100],[108,203],[300,400]}
 type RangeSet struct {
     rangeSet []*Range
 }
@@ -16,12 +16,14 @@ type Range struct {
     end   uint64
 }
 
+//NewRangeSet create a range set
 func NewRangeSet() *RangeSet {
     return &RangeSet{
         rangeSet: make([]*Range, 0),
     }
 }
 
+//NewRangeSet create a range set
 func NewRange(start, end uint64) *Range {
     return &Range{start: start, end: end}
 }
