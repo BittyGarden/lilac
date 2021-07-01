@@ -2,9 +2,9 @@
 
 lilac,go tools.
 
-latest version: `v1.1.7`
+latest version: `v1.1.9`
 
-require:`github.com/bittygarden/lilac v1.1.7`
+require:`github.com/bittygarden/lilac v1.1.9`
 
 import: `github.com/bittygarden/lilac/date_tool`
 
