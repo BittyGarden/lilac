@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type ptest struct {
+type pTest struct {
 	id   string
 	name string
 	age  int
@@ -16,7 +16,7 @@ type ptest struct {
 
 func TestNewFixDurationCache(t *testing.T) {
 	cache := NewFixedDurationCache(time.Second*100, func(v interface{}) string {
-		return v.(ptest).id
+		return v.(pTest).id
 	})
 
 	assert.NotNil(t, cache)
@@ -25,13 +25,13 @@ func TestNewFixDurationCache(t *testing.T) {
 func TestExistsAndExpire(t *testing.T) {
 	duration := time.Millisecond * 100
 	cache := NewFixedDurationCache(duration, func(v interface{}) string {
-		return v.(ptest).id
+		return v.(pTest).id
 	})
 	assert.NotNil(t, cache)
 
-	v1 := ptest{id: "1", name: "1", age: 1}
+	v1 := pTest{id: "1", name: "1", age: 1}
 	cache.Add(v1)
-	v2 := ptest{id: "2", name: "2", age: 2}
+	v2 := pTest{id: "2", name: "2", age: 2}
 	cache.Add(v2)
 
 	assert.True(t, cache.Exists(v1))
@@ -48,26 +48,26 @@ func TestExistsAndExpire(t *testing.T) {
 	assert.False(t, cache.ExistsByKey("1"))
 	assert.False(t, cache.ExistsByKey("2"))
 
-	v3 := ptest{id: "3", name: "3", age: 3}
+	v3 := pTest{id: "3", name: "3", age: 3}
 	cache.Add(v3)
 
-	assert.Equal(t, "3", cache.start.value.(ptest).id)
+	assert.Equal(t, "3", cache.start.value.(pTest).id)
 }
 
 func TestDiff(t *testing.T) {
 	duration := time.Millisecond * 100
 	cache := NewFixedDurationCache(duration, func(v interface{}) string {
-		return v.(ptest).id
+		return v.(pTest).id
 	})
 	assert.NotNil(t, cache)
 
-	v1 := ptest{id: "1", name: "1", age: 1}
+	v1 := pTest{id: "1", name: "1", age: 1}
 	cache.Add(v1)
-	v2 := ptest{id: "2", name: "2", age: 2}
+	v2 := pTest{id: "2", name: "2", age: 2}
 	cache.Add(v2)
-	v3 := ptest{id: "3", name: "3", age: 3}
+	v3 := pTest{id: "3", name: "3", age: 3}
 	cache.Add(v3)
-	v4 := ptest{id: "4", name: "4", age: 4}
+	v4 := pTest{id: "4", name: "4", age: 4}
 	cache.Add(v4)
 
 	all := cache.GetAll()
@@ -84,7 +84,7 @@ func TestParallel(t *testing.T) {
 	duration := time.Millisecond * 1000
 
 	cache := NewFixedDurationCache(duration, func(v interface{}) string {
-		return v.(ptest).id
+		return v.(pTest).id
 	})
 
 	start := time.Now().UnixNano()
@@ -93,7 +93,7 @@ func TestParallel(t *testing.T) {
 		waitGroup.Add(1)
 		go func(index int) {
 			for c := 0; c < addCount; c++ {
-				cache.Add(ptest{id: getId(index, c), name: "_", age: index})
+				cache.Add(pTest{id: getId(index, c), name: "_", age: index})
 			}
 			waitGroup.Done()
 		}(i)
@@ -103,7 +103,7 @@ func TestParallel(t *testing.T) {
 	fmt.Println((end - start) / 1000000)
 
 	start = time.Now().UnixNano()
-	p := ptest{id: getId(goroutine-1, addCount-1), name: "_", age: 0}
+	p := pTest{id: getId(goroutine-1, addCount-1), name: "_", age: 0}
 	end = time.Now().UnixNano()
 	fmt.Println((end - start) / 1000000)
 	assert.True(t, cache.Exists(p))
