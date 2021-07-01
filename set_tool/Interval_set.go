@@ -1,4 +1,4 @@
-package types
+package set_tool
 
 import (
     "fmt"
