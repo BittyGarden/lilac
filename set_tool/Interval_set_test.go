@@ -8,92 +8,92 @@ import (
 )
 
 func TestRangeSet_add(t *testing.T) {
-    set := NewRangeSet()
+    set := NewIntervalSet()
 
-    set.Add(&Range{start: 1, end: 1})
+    set.Add(&Interval{start: 1, end: 1})
     assert.Equal(t, uint64(1), set.rangeSet[0].start)
     assert.Equal(t, uint64(1), set.rangeSet[0].end)
 
-    set.Add(&Range{start: 3, end: 3})
+    set.Add(&Interval{start: 3, end: 3})
     assert.Equal(t, uint64(1), set.rangeSet[0].start)
     assert.Equal(t, uint64(1), set.rangeSet[0].end)
 
     assert.Equal(t, uint64(3), set.rangeSet[1].start)
     assert.Equal(t, uint64(3), set.rangeSet[1].end)
 
-    set.Add(&Range{start: 2, end: 2})
+    set.Add(&Interval{start: 2, end: 2})
     assert.Equal(t, 1, len(set.rangeSet))
     assert.Equal(t, uint64(1), set.rangeSet[0].start)
     assert.Equal(t, uint64(3), set.rangeSet[0].end)
 
-    set.Add(&Range{start: 5, end: 5})
+    set.Add(&Interval{start: 5, end: 5})
     assert.Equal(t, 2, len(set.rangeSet))
     assert.Equal(t, uint64(5), set.rangeSet[1].start)
     assert.Equal(t, uint64(5), set.rangeSet[1].end)
 
-    set.Add(&Range{start: 10, end: 10})
+    set.Add(&Interval{start: 10, end: 10})
     assert.Equal(t, 3, len(set.rangeSet))
     assert.Equal(t, uint64(10), set.rangeSet[2].start)
     assert.Equal(t, uint64(10), set.rangeSet[2].end)
 
-    set.Add(&Range{start: 4, end: 10})
+    set.Add(&Interval{start: 4, end: 10})
     assert.Equal(t, 1, len(set.rangeSet))
     assert.Equal(t, uint64(1), set.rangeSet[0].start)
     assert.Equal(t, uint64(10), set.rangeSet[0].end)
 
-    set.Add(&Range{start: 1, end: 1})
+    set.Add(&Interval{start: 1, end: 1})
     assert.Equal(t, 1, len(set.rangeSet))
     assert.Equal(t, uint64(1), set.rangeSet[0].start)
     assert.Equal(t, uint64(10), set.rangeSet[0].end)
 
-    set.Add(&Range{start: 10, end: 12})
+    set.Add(&Interval{start: 10, end: 12})
     assert.Equal(t, 1, len(set.rangeSet))
     assert.Equal(t, uint64(1), set.rangeSet[0].start)
     assert.Equal(t, uint64(12), set.rangeSet[0].end)
 
-    set.Add(&Range{start: 13, end: 14})
+    set.Add(&Interval{start: 13, end: 14})
     assert.Equal(t, 1, len(set.rangeSet))
     assert.Equal(t, uint64(1), set.rangeSet[0].start)
     assert.Equal(t, uint64(14), set.rangeSet[0].end)
 
-    set.Add(&Range{start: 100, end: 120})
+    set.Add(&Interval{start: 100, end: 120})
     assert.Equal(t, 2, len(set.rangeSet))
     assert.Equal(t, uint64(100), set.rangeSet[1].start)
     assert.Equal(t, uint64(120), set.rangeSet[1].end)
 
-    set.Add(&Range{start: 130, end: 140})
+    set.Add(&Interval{start: 130, end: 140})
     assert.Equal(t, 3, len(set.rangeSet))
     assert.Equal(t, uint64(130), set.rangeSet[2].start)
     assert.Equal(t, uint64(140), set.rangeSet[2].end)
 
-    set.Add(&Range{start: 122, end: 123})
+    set.Add(&Interval{start: 122, end: 123})
     assert.Equal(t, 4, len(set.rangeSet))
     assert.Equal(t, uint64(122), set.rangeSet[2].start)
     assert.Equal(t, uint64(123), set.rangeSet[2].end)
 
-    set.Add(&Range{start: 15, end: 99})
-    set.Add(&Range{start: 120, end: 140})
+    set.Add(&Interval{start: 15, end: 99})
+    set.Add(&Interval{start: 120, end: 140})
     assert.Equal(t, 1, len(set.rangeSet))
     assert.Equal(t, uint64(1), set.rangeSet[0].start)
     assert.Equal(t, uint64(140), set.rangeSet[0].end)
 }
 
 func TestA(t *testing.T) {
-    set := NewRangeSet()
-    set.Add(NewRange(7208, 7208))
-    set.Add(NewRange(5448, 5448))
-    set.Add(NewRange(7762, 7762))
-    set.Add(NewRange(4610, 4610))
+    set := NewIntervalSet()
+    set.Add(NewInterval(7208, 7208))
+    set.Add(NewInterval(5448, 5448))
+    set.Add(NewInterval(7762, 7762))
+    set.Add(NewInterval(4610, 4610))
 
     assert.Equal(t, uint64(4610), set.rangeSet[0].start)
 }
 
 func TestRangeSet(t *testing.T) {
-    set := NewRangeSet()
+    set := NewIntervalSet()
     for {
         value := rand.Intn(10000)
-        set.Add(NewRange(uint64(value), uint64(value)))
-        var r *Range
+        set.Add(NewInterval(uint64(value), uint64(value)))
+        var r *Interval
         for _, v := range set.rangeSet {
             if r == nil {
                 r = v
@@ -114,17 +114,17 @@ func TestRangeSet(t *testing.T) {
 }
 
 func TestHaveSameIndex(t *testing.T) {
-    a := &Range{start: 1, end: 1}
-    b := &Range{start: 1, end: 10}
+    a := &Interval{start: 1, end: 1}
+    b := &Interval{start: 1, end: 10}
     assert.True(t, haveSameIndex(a, b))
 }
 
 func TestRemoveBefore(t *testing.T) {
-    set := NewRangeSet()
-    set.Add(NewRange(1, 1))
-    set.Add(NewRange(3, 3))
-    set.Add(NewRange(5, 5))
-    set.Add(NewRange(7, 7))
+    set := NewIntervalSet()
+    set.Add(NewInterval(1, 1))
+    set.Add(NewInterval(3, 3))
+    set.Add(NewInterval(5, 5))
+    set.Add(NewInterval(7, 7))
 
     set.RemoveBefore(0)
     assert.Equal(t, 4, len(set.rangeSet))
@@ -140,23 +140,23 @@ func TestRemoveBefore(t *testing.T) {
 }
 
 func TestRemoveBeforeEmpty(t *testing.T) {
-    set := NewRangeSet()
+    set := NewIntervalSet()
 
     set.RemoveBefore(0)
     assert.Equal(t, 0, len(set.rangeSet))
 }
 
 func TestContains(t *testing.T) {
-    set := NewRangeSet()
+    set := NewIntervalSet()
 
-    set.Add(NewRange(1, 1))
+    set.Add(NewInterval(1, 1))
 
-    set.Add(NewRange(3, 3))
+    set.Add(NewInterval(3, 3))
 
-    set.Add(NewRange(9, 100))
-    set.Add(NewRange(100, 200))
+    set.Add(NewInterval(9, 100))
+    set.Add(NewInterval(100, 200))
 
-    set.Add(NewRange(10000, 99999))
+    set.Add(NewInterval(10000, 99999))
 
     assert.False(t, set.Contains(0))
     assert.True(t, set.Contains(1))
