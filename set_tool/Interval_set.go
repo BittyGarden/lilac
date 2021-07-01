@@ -7,7 +7,7 @@ import (
 
 //IntervalSet is an interval set, such as {[1,1],[5,100],[108,203],[300,400]}
 type IntervalSet struct {
-    rangeSet []*Interval
+    intervalSet []*Interval
 }
 
 //Interval between [start,end]
@@ -16,14 +16,14 @@ type Interval struct {
     end   uint64
 }
 
-//NewIntervalSet create a range set
+//NewIntervalSet create an interval set
 func NewIntervalSet() *IntervalSet {
     return &IntervalSet{
-        rangeSet: make([]*Interval, 0),
+        intervalSet: make([]*Interval, 0),
     }
 }
 
-//NewIntervalSet create a range set
+//NewIntervalSet create an interval set
 func NewInterval(start, end uint64) *Interval {
     return &Interval{start: start, end: end}
 }
@@ -41,13 +41,13 @@ func (rs *IntervalSet) Add(r *Interval) {
         return
     }
 
-    if len(rs.rangeSet) == 0 {
-        rs.rangeSet = append(rs.rangeSet, &Interval{start: r.start, end: r.end})
+    if len(rs.intervalSet) == 0 {
+        rs.intervalSet = append(rs.intervalSet, &Interval{start: r.start, end: r.end})
         return
     }
 
     insertIndex := -1
-    for index, rr := range rs.rangeSet {
+    for index, rr := range rs.intervalSet {
         if r.start < rr.start && insertIndex == -1 {
             insertIndex = index
         }
@@ -55,12 +55,12 @@ func (rs *IntervalSet) Add(r *Interval) {
             rr.start = Min(r.start, rr.start)
             rr.end = Max(r.end, rr.end)
             nextIndex := index + 1
-            if nextIndex < len(rs.rangeSet) && rr.end+1 >= rs.rangeSet[nextIndex].start {
-                temp := rs.rangeSet[nextIndex]
-                if index+2 < len(rs.rangeSet) {
-                    rs.rangeSet = append(rs.rangeSet[0:nextIndex], rs.rangeSet[index+2:]...)
+            if nextIndex < len(rs.intervalSet) && rr.end+1 >= rs.intervalSet[nextIndex].start {
+                temp := rs.intervalSet[nextIndex]
+                if index+2 < len(rs.intervalSet) {
+                    rs.intervalSet = append(rs.intervalSet[0:nextIndex], rs.intervalSet[index+2:]...)
                 } else {
-                    rs.rangeSet = rs.rangeSet[0:nextIndex]
+                    rs.intervalSet = rs.intervalSet[0:nextIndex]
                 }
                 rs.Add(temp)
             }
@@ -69,23 +69,23 @@ func (rs *IntervalSet) Add(r *Interval) {
     }
 
     if insertIndex == -1 {
-        insertIndex = len(rs.rangeSet)
+        insertIndex = len(rs.intervalSet)
     }
 
     insert := &Interval{
         start: r.start,
         end:   r.end,
     }
-    rs.rangeSet = append(rs.rangeSet, insert)
-    copy(rs.rangeSet[insertIndex+1:], rs.rangeSet[insertIndex:])
-    rs.rangeSet[insertIndex] = insert
+    rs.intervalSet = append(rs.intervalSet, insert)
+    copy(rs.intervalSet[insertIndex+1:], rs.intervalSet[insertIndex:])
+    rs.intervalSet[insertIndex] = insert
 }
 
-//RemoveBefore remove range before index
-func (rs *IntervalSet) RemoveBefore(removeRangeEnd uint64) {
+//RemoveBefore remove interval before index
+func (rs *IntervalSet) RemoveBefore(removeIntervalEnd uint64) {
     removeIndex := -1
-    for index, v := range rs.rangeSet {
-        if v.end >= removeRangeEnd {
+    for index, v := range rs.intervalSet {
+        if v.end >= removeIntervalEnd {
             break
         }
         removeIndex = index
@@ -94,16 +94,16 @@ func (rs *IntervalSet) RemoveBefore(removeRangeEnd uint64) {
         return
     }
     removeIndex = removeIndex + 1
-    if removeIndex >= len(rs.rangeSet) {
-        rs.rangeSet = make([]*Interval, 0)
+    if removeIndex >= len(rs.intervalSet) {
+        rs.intervalSet = make([]*Interval, 0)
         return
     }
-    rs.rangeSet = rs.rangeSet[removeIndex:]
+    rs.intervalSet = rs.intervalSet[removeIndex:]
 }
 
 func (rs *IntervalSet) String() string {
     builder := strings.Builder{}
-    for _, r := range rs.rangeSet {
+    for _, r := range rs.intervalSet {
         builder.WriteString("[")
         builder.WriteString(fmt.Sprintf("%d", r.start))
         builder.WriteString(string(","))
@@ -114,12 +114,12 @@ func (rs *IntervalSet) String() string {
 }
 
 func (rs *IntervalSet) MissingCount() int {
-    if len(rs.rangeSet) == 0 {
+    if len(rs.intervalSet) == 0 {
         return 0
     }
     var start uint64 = 1
     missingCount := 0
-    for _, r := range rs.rangeSet {
+    for _, r := range rs.intervalSet {
         for {
             if start < r.start {
                 start++
@@ -135,7 +135,7 @@ func (rs *IntervalSet) MissingCount() int {
 }
 
 func (rs *IntervalSet) Contains(index uint64) bool {
-    for _, r := range rs.rangeSet {
+    for _, r := range rs.intervalSet {
         if index >= r.start && index <= r.end {
             return true
         }
@@ -144,7 +144,7 @@ func (rs *IntervalSet) Contains(index uint64) bool {
 }
 
 func (rs *IntervalSet) index(index uint64) int {
-    for i, r := range rs.rangeSet {
+    for i, r := range rs.intervalSet {
         if index >= r.start && index <= r.end {
             return i
         }

@@ -10,6 +10,10 @@ import: `github.com/bittygarden/lilac/date_tool`
 
 import: `github.com/bittygarden/lilac/io_tool`
 
+import: `github.com/bittygarden/lilac/random_tool`
+
+import: `github.com/bittygarden/lilac/set_tool`
+
 ## date_tool
 
 * `date_tool.NowInE8() time.Time` current time in EAST 8 time zone.
@@ -31,3 +35,7 @@ import: `github.com/bittygarden/lilac/io_tool`
 ## random_tool
 
 * `random_tool.RandomNumber(max int, count int) ([]int, error)` generate specified count random number that in range [0, max) .
+
+## set_tool
+
+* `set_tool.NewIntervalSet() *IntervalSet` new an interval set.
