@@ -9,20 +9,72 @@ import (
 
 const fourBlank = "    "
 
-var defaultLock sync.Mutex
-var defaultTimerMap = make(map[string]*Timer)
-
-func GetTimer(model string) *Timer {
-	defaultLock.Lock()
-	defer defaultLock.Unlock()
-	if _, ok := defaultTimerMap[model]; !ok {
-		defaultTimerMap[model] = &Timer{
-			done:  false,
-			model: model,
-			root:  newTimerNode("model: " + model),
-		}
+func NewStopWatcher(name string) *StopWatcher {
+	return &StopWatcher{
+		model: name,
+		done:  false,
+		root:  newTimerNode("StopWatcher_" + name),
 	}
-	return defaultTimerMap[model]
+}
+
+type StopWatcher struct {
+	mutex sync.Mutex
+	model string
+	done  bool
+	root  *TimerNode
+}
+
+func (t *StopWatcher) Start(tag string) {
+	if tag == "" {
+		return
+	}
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+	t.root.addChild(newTimerNode(tag))
+}
+
+func (t *StopWatcher) End(tag string) {
+	if tag == "" {
+		return
+	}
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+	t.root.setEndTime(tag)
+}
+
+func (t *StopWatcher) Exit() {
+	if !t.done {
+		now := time.Now()
+		t.root.end = &now
+	}
+}
+
+func (t *StopWatcher) String() string {
+	if !t.done {
+		t.done = true
+		now := time.Now()
+		t.root.end = &now
+	}
+	return t.root.String()
+}
+
+func (t *StopWatcher) StartSub(parentTag, tag string) {
+	if parentTag == "" || tag == "" {
+		return
+	}
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+	t.root.addChildNode(parentTag, newTimerNode(tag))
+
+}
+
+func (t *StopWatcher) EndSub(parentTag, tag string) {
+	if parentTag == "" || tag == "" {
+		return
+	}
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+	t.root.setChildEndTime(parentTag, tag)
 }
 
 type TimerNode struct {
@@ -140,66 +192,6 @@ func newTimerNode(tag string) *TimerNode {
 		start:    &now,
 		children: make([]*TimerNode, 0),
 	}
-}
-
-type Timer struct {
-	mutex sync.Mutex
-	model string
-	done  bool
-	root  *TimerNode
-}
-
-func (t *Timer) Start(tag string) {
-	if tag == "" {
-		return
-	}
-	t.mutex.Lock()
-	defer t.mutex.Unlock()
-	t.root.addChild(newTimerNode(tag))
-}
-
-func (t *Timer) End(tag string) {
-	if tag == "" {
-		return
-	}
-	t.mutex.Lock()
-	defer t.mutex.Unlock()
-	t.root.setEndTime(tag)
-}
-
-func (t *Timer) Exit() {
-	if !t.done {
-		now := time.Now()
-		t.root.end = &now
-	}
-}
-
-func (t *Timer) String() string {
-	if !t.done {
-		t.done = true
-		now := time.Now()
-		t.root.end = &now
-	}
-	return t.root.String()
-}
-
-func (t *Timer) StartSub(parentTag, tag string) {
-	if parentTag == "" || tag == "" {
-		return
-	}
-	t.mutex.Lock()
-	defer t.mutex.Unlock()
-	t.root.addChildNode(parentTag, newTimerNode(tag))
-
-}
-
-func (t *Timer) EndSub(parentTag, tag string) {
-	if parentTag == "" || tag == "" {
-		return
-	}
-	t.mutex.Lock()
-	defer t.mutex.Unlock()
-	t.root.setChildEndTime(parentTag, tag)
 }
 
 func getPrefixBlank(deep int) string {
