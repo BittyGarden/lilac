@@ -1,20 +1,12 @@
 # lilac
 
-lilac,go tools.
+支持go1.18及以上的版本。
 
-latest version: `v1.1.11`
+Go工具类仓库，不同的包里面存放不同作用的工具类。
 
-require:`github.com/bittygarden/lilac v1.1.11`
+文档地址：[v1.1.12](https://pkg.go.dev/github.com/bittygarden/lilac@v1.1.12)
 
-import: `github.com/bittygarden/lilac/date_tool`
-
-import: `github.com/bittygarden/lilac/io_tool`
-
-import: `github.com/bittygarden/lilac/random_tool`
-
-import: `github.com/bittygarden/lilac/set_tool`
-
-## date_tool
+## date_tool 日期工具
 
 * `date_tool.NowInE8() time.Time` current time in EAST 8 time zone.
 * `date_tool.NowDateTime() string` return current time in EAST 8 time zone with yyyy-MM-dd HH:mm:ss format.
