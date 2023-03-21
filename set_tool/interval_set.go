@@ -23,7 +23,7 @@ func NewIntervalSet() *IntervalSet {
 	}
 }
 
-// NewIntervalSet create an interval set
+// NewInterval create an interval set
 func NewInterval(start, end uint64) *Interval {
 	return &Interval{start: start, end: end}
 }
@@ -34,10 +34,6 @@ func (rs *IntervalSet) Add(r *Interval) {
 	}
 
 	if r.start > r.end {
-		return
-	}
-
-	if r.start == 0 || r.end == 0 {
 		return
 	}
 
