@@ -1,5 +1,5 @@
-name: "CI"
-on: ["push", "pull_request"]
+name: "RunGoTestAndVetOn17181920"
+on: ["push"]
 
 jobs:
   ci:
@@ -8,7 +8,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["windows-latest", "ubuntu-latest", "macOS-latest","centos-latest"]
-        go: ["1.17.x", "1.18.x","1.19.x"]
+        go: ["1.17.x", "1.18.x","1.19.x","1.20.x"]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v1
@@ -22,6 +22,6 @@ jobs:
     - uses: dominikh/staticcheck-action@v1.0.0
       with:
         version: 274e0ee95850bc820301bfe5961eed9ebc8cb9e1
-        min-go-version: "1.19"
+        min-go-version: "1.17"
         install-go: false
         cache-key: ${{ matrix.go }}
