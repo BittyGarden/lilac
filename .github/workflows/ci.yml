@@ -8,14 +8,19 @@ jobs:
       fail-fast: false
       matrix:
         os: ["windows-latest", "ubuntu-latest", "macOS-latest","centos-latest"]
-        go: ["1.17.x", "1.18.x","1.19.x","1.20.x"]
+        go: ["1.15.x","1.16.x","1.17.x", "1.18.x","1.19.x","1.20.x"]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v1
+
+    - name: "checkout code"
+    - uses: actions/checkout@v2
       with:
         fetch-depth: 1
+
+    - name: "setup-go"
     - uses: WillAbides/setup-go-faster@v1.7.0
       with:
         go-version: ${{ matrix.go }}
+
     - run: "go test ./..."
     - run: "go vet ./..."
