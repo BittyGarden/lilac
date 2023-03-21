@@ -13,12 +13,12 @@ jobs:
     steps:
 
     - name: "checkout code"
-    - uses: actions/checkout@v2
+      uses: actions/checkout@v2
       with:
         fetch-depth: 1
 
     - name: "setup-go"
-    - uses: WillAbides/setup-go-faster@v1.7.0
+      uses: WillAbides/setup-go-faster@v1.7.0
       with:
         go-version: ${{ matrix.go }}
 
