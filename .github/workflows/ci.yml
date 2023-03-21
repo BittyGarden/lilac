@@ -1,5 +1,5 @@
-name: "CI"
-on: ["push", "pull_request"]
+name: "RunGoTestAndVetOn17181920"
+on: ["push"]
 
 jobs:
   ci:
@@ -8,7 +8,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["windows-latest", "ubuntu-latest", "macOS-latest","centos-latest"]
-        go: ["1.17.x", "1.18.x","1.19.x"]
+        go: ["1.17.x", "1.18.x","1.19.x","1.20.x"]
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v1
